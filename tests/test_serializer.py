@@ -9,7 +9,7 @@ from toon_parser import stringify
 from toon_parser.serializer import ToonSerializeError
 
 # Load shared test cases
-test_cases_path = Path(__file__).parent.parent.parent / "shared" / "test_cases.json"
+test_cases_path = Path(__file__).parent.parent / "shared" / "test_cases.json"
 with open(test_cases_path) as f:
     TEST_CASES = json.load(f)
 
