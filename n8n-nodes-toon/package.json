@@ -1,0 +1,56 @@
+{
+  "name": "n8n-nodes-simple-toon",
+  "version": "0.1.1",
+  "description": "n8n community node for TOON (Token-Oriented Object Notation) - Parse and serialize compact data format optimized for LLMs",
+  "keywords": [
+    "n8n-community-node-package",
+    "toon",
+    "parser",
+    "serializer",
+    "llm",
+    "token-optimization"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ignaciocolussi/simple_toon",
+  "author": {
+    "name": "Ignacio Colussi",
+    "email": "ignaciocolussi@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignaciocolussi/simple_toon.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint 'nodes/**/*.ts' package.json",
+    "lintfix": "eslint 'nodes/**/*.ts' package.json --fix",
+    "lint:prepublish": "eslint -c .eslintrc.prepublish.js 'nodes/**/*.ts' package.json",
+    "prepublishOnly": "npm run build && npm run lint:prepublish"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [],
+    "nodes": [
+      "dist/nodes/Toon/Toon.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.11.0",
+    "gulp": "^4.0.2",
+    "n8n-workflow": "^1.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.3.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {}
+}

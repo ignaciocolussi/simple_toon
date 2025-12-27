@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#4A90E2" opacity="0.1"/>
+
+  <!-- Main icon design - representing tabular/structured data -->
+  <g transform="translate(12, 16)">
+    <!-- Header row (array definition) -->
+    <rect x="0" y="0" width="40" height="8" rx="2" fill="#4A90E2"/>
+
+    <!-- Data rows -->
+    <rect x="0" y="12" width="40" height="6" rx="1" fill="#7AB8F5" opacity="0.8"/>
+    <rect x="0" y="21" width="40" height="6" rx="1" fill="#7AB8F5" opacity="0.6"/>
+    <rect x="0" y="30" width="40" height="6" rx="1" fill="#7AB8F5" opacity="0.4"/>
+
+    <!-- Column separators -->
+    <line x1="13" y1="0" x2="13" y2="36" stroke="#fff" stroke-width="1" opacity="0.5"/>
+    <line x1="27" y1="0" x2="27" y2="36" stroke="#fff" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Brackets indicating array notation -->
+  <text x="8" y="38" font-family="monospace" font-size="20" font-weight="bold" fill="#4A90E2">[</text>
+  <text x="54" y="38" font-family="monospace" font-size="20" font-weight="bold" fill="#4A90E2">]</text>
+</svg>

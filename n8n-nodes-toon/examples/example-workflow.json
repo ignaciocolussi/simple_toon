@@ -1,0 +1,98 @@
+{
+  "name": "TOON Example Workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Start",
+      "type": "n8n-nodes-base.start",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "parse",
+        "toonInput": "users[3]{id,name,email,active}:\n  1,Alice,alice@example.com,true\n  2,Bob,bob@example.com,false\n  3,Charlie,charlie@example.com,true"
+      },
+      "name": "Parse TOON to JSON",
+      "type": "n8n-nodes-toon.toon",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "stringify",
+        "useInputData": true
+      },
+      "name": "Convert Back to TOON",
+      "type": "n8n-nodes-toon.toon",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "validate",
+        "validateInputField": "toon"
+      },
+      "name": "Validate TOON",
+      "type": "n8n-nodes-toon.toon",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "operation": "autoConvert",
+        "autoConvertInput": "{\"products\":[{\"id\":101,\"name\":\"Widget\",\"price\":19.99},{\"id\":102,\"name\":\"Gadget\",\"price\":29.99}]}"
+      },
+      "name": "Auto Convert JSON to TOON",
+      "type": "n8n-nodes-toon.toon",
+      "typeVersion": 1,
+      "position": [450, 500]
+    }
+  ],
+  "connections": {
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Parse TOON to JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse TOON to JSON": {
+      "main": [
+        [
+          {
+            "node": "Convert Back to TOON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Back to TOON": {
+      "main": [
+        [
+          {
+            "node": "Validate TOON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start": {
+      "main": [
+        [
+          {
+            "node": "Auto Convert JSON to TOON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
