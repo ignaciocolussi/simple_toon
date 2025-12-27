@@ -1,0 +1,53 @@
+{
+  "simple_array": {
+    "json": {
+      "users": [
+        {"id": 1, "name": "Alice", "active": true},
+        {"id": 2, "name": "Bob", "active": false}
+      ]
+    },
+    "toon": "users[2]{id,name,active}:\n  1,Alice,true\n  2,Bob,false"
+  },
+  "with_strings": {
+    "json": {
+      "logs": [
+        {"id": 2001, "timestamp": "2025-11-18T08:14:23Z", "level": "error"},
+        {"id": 2002, "timestamp": "2025-11-18T08:15:00Z", "level": "info"}
+      ]
+    },
+    "toon": "logs[2]{id,timestamp,level}:\n  2001,\"2025-11-18T08:14:23Z\",error\n  2002,\"2025-11-18T08:15:00Z\",info"
+  },
+  "with_nulls": {
+    "json": {
+      "data": [
+        {"id": 1, "value": null},
+        {"id": 2, "value": 42}
+      ]
+    },
+    "toon": "data[2]{id,value}:\n  1,null\n  2,42"
+  },
+  "mixed_types": {
+    "json": {
+      "records": [
+        {"id": 1, "score": 95.5, "passed": true, "comment": "Great job!"},
+        {"id": 2, "score": 67.3, "passed": false, "comment": "Needs improvement"}
+      ]
+    },
+    "toon": "records[2]{id,score,passed,comment}:\n  1,95.5,true,\"Great job!\"\n  2,67.3,false,\"Needs improvement\""
+  },
+  "empty_array": {
+    "json": {
+      "items": []
+    },
+    "toon": "items[0]{}:\n"
+  },
+  "special_chars": {
+    "json": {
+      "messages": [
+        {"id": 1, "text": "Hello, world!"},
+        {"id": 2, "text": "Quote: \"test\""}
+      ]
+    },
+    "toon": "messages[2]{id,text}:\n  1,\"Hello, world!\"\n  2,\"Quote: \\\"test\\\"\""
+  }
+}
