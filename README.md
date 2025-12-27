@@ -1,5 +1,10 @@
 # TOON Parser (Python)
 
+[![Tests](https://github.com/ignaciocolussi/simple_toon/workflows/Tests/badge.svg)](https://github.com/ignaciocolussi/simple_toon/actions)
+[![PyPI version](https://badge.fury.io/py/simple-toon.svg)](https://pypi.org/project/simple-toon/)
+[![Python versions](https://img.shields.io/pypi/pyversions/simple-toon.svg)](https://pypi.org/project/simple-toon/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Python parser and serializer for **TOON (Token-Oriented Object Notation)**, a compact data format designed to reduce LLM token consumption by 30-60% compared to JSON.
 
 ## Installation
@@ -270,6 +275,18 @@ ruff check toon_parser/ tests/
 mypy toon_parser/
 ```
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+**Quick start for contributors:**
+1. Fork the repository
+2. Create a feature branch
+3. Install dev dependencies: `pip install -e ".[dev]"`
+4. Install pre-commit hooks: `pre-commit install`
+5. Make your changes and run tests
+6. Submit a pull request
+
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) for details
