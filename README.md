@@ -1,4 +1,4 @@
-# TOON Parser (Python)
+# Simple TOON Parser (Python)
 
 [![Tests](https://github.com/ignaciocolussi/simple_toon/workflows/Tests/badge.svg)](https://github.com/ignaciocolussi/simple_toon/actions)
 [![PyPI version](https://badge.fury.io/py/simple-toon.svg)](https://pypi.org/project/simple-toon/)
