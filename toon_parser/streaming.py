@@ -2,7 +2,7 @@
 
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, TextIO, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, TextIO, Union
 
 from .advanced import ToonConfig
 from .serializer import _format_value
@@ -48,6 +48,7 @@ class StreamingSerializer:
         self._current_array: Optional[str] = None
         self._current_fields: Optional[List[str]] = None
         self._row_count = 0
+        self._output_path: Optional[Path] = None
 
         # Handle file path vs file object
         if isinstance(output, (str, Path)):
@@ -55,7 +56,6 @@ class StreamingSerializer:
             self._file_owned = True
         else:
             self._file = output
-            self._output_path = None
 
     def __enter__(self) -> "StreamingSerializer":
         """Context manager entry."""
@@ -64,7 +64,7 @@ class StreamingSerializer:
             self._file = open(self._output_path, "w", encoding="utf-8")
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Context manager exit."""
         if self._current_array:
             # Auto-close any open array
@@ -279,7 +279,7 @@ def streaming_serializer(
 
 
 def stream_from_database(
-    query_func,
+    query_func: Callable[[], Iterator[Dict[str, Any]]],
     array_name: str,
     fields: List[str],
     output: Union[str, Path],

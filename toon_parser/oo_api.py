@@ -9,7 +9,7 @@ Why both?
 """
 
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
 
 from .advanced import (
     ToonConfig,
@@ -332,7 +332,9 @@ class ToonDocument:
             raise KeyError(f"Array '{array_name}' not found. Use add_array() to create it.")
         self.data[array_name].append(item)
 
-    def query(self, array_name: str, predicate) -> List[Dict[str, Any]]:
+    def query(
+        self, array_name: str, predicate: Callable[[Dict[str, Any]], bool]
+    ) -> List[Dict[str, Any]]:
         """
         Query array with predicate function.
 

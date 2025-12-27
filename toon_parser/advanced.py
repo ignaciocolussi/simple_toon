@@ -241,7 +241,7 @@ def stream_parse(
             fields = [f.strip() for f in fields_str.split(",")] if fields_str else []
 
             # Parse rows
-            items = []
+            items: list[dict[str, Any]] = []
             i += 1
             indent = len(lines[i]) - len(lines[i].lstrip()) if i < len(lines) else 0
 

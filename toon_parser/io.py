@@ -345,7 +345,7 @@ def get_file_stats(file_path: Union[str, Path]) -> Dict[str, Any]:
         raise ToonFileError(f"Unknown file format: {path.suffix}")
 
     # Collect stats
-    stats = {
+    stats: Dict[str, Any] = {
         "file_path": str(path),
         "format": format_type,
         "file_size_bytes": file_size,

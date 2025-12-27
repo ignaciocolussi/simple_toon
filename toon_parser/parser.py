@@ -88,7 +88,7 @@ def _parse_lines(lines: List[str], start_idx: int, current_indent: int) -> Tuple
         fields = [f.strip() for f in array_match.group(3).split(",")]
 
         # Parse data rows
-        rows = []
+        rows: list[dict[str, Any]] = []
         idx = start_idx + 1
         expected_indent = indent + 2  # TOON uses 2-space indentation
 
