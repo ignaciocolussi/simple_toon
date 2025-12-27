@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simple-toon"
-version = "0.2.0"
+version = "0.2.1"
 description = "Python parser and serializer for TOON (Token-Oriented Object Notation) - Reduce LLM token usage by 30-60%"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -59,9 +59,9 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/ignaciocolussi/simple_toon"
 Repository = "https://github.com/ignaciocolussi/simple_toon"
-Documentation = "https://github.com/ignac/simple-toon#readme"
-"Bug Tracker" = "https://github.com/ignac/simple-toon/issues"
-Changelog = "https://github.com/ignac/simple-toon/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/ignaciocolussi/simple_toon#readme"
+"Bug Tracker" = "https://github.com/ignaciocolussi/simple_toon/issues"
+Changelog = "https://github.com/ignaciocolussi/simple_toon/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 where = ["."]
