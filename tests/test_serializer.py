@@ -1,11 +1,12 @@
 """Tests for TOON serializer."""
 
 import json
-import pytest
 from pathlib import Path
+
+import pytest
+
 from toon_parser import stringify
 from toon_parser.serializer import ToonSerializeError
-
 
 # Load shared test cases
 test_cases_path = Path(__file__).parent.parent.parent / "shared" / "test_cases.json"
@@ -83,9 +84,10 @@ class TestSerializer:
 
     def test_nested_objects_error(self):
         """Test that nested objects in arrays raise error for now."""
-        nested = {"items": [{"id": 1, "data": {"nested": "value"}}]}
+        _nested = {"items": [{"id": 1, "data": {"nested": "value"}}]}
         # This should work if we support nested structures
         # For now, it might fail depending on implementation
+        # TODO: Implement actual test when nested object support is added
 
     def test_field_order_preservation(self):
         """Test that field order is preserved from first item."""

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a dual-language (JavaScript/TypeScript + Python) parser and serializer for **TOON (Token-Oriented Object Notation)**, a compact data format designed to reduce LLM token consumption by 30-60% compared to JSON while maintaining lossless conversion.
+This is a Python parser and serializer for **TOON (Token-Oriented Object Notation)**, a compact data format designed to reduce LLM token consumption by 30-60% compared to JSON while maintaining lossless conversion.
 
 TOON is optimized for uniform arrays of objects (tabular/semi-structured data) and uses:
 - YAML-style indentation for nesting
@@ -51,66 +51,28 @@ users[2]{id,name,active}:
 
 ## Project Structure
 
-This is a **monorepo** containing two separate packages:
-
 ```
 /
-├── js/                    # JavaScript/TypeScript package (npm)
-│   ├── src/
-│   │   ├── parser.ts     # TOON → JSON parser
-│   │   ├── serializer.ts # JSON → TOON serializer
-│   │   └── index.ts      # Public API exports
-│   ├── tests/
-│   ├── package.json
-│   └── tsconfig.json
+├── toon_parser/          # Main package
+│   ├── __init__.py       # Public API exports
+│   ├── parser.py         # TOON → JSON parser
+│   ├── serializer.py     # JSON → TOON serializer
+│   └── advanced.py       # Advanced parsing features
 │
-├── python/                # Python package (pip)
-│   ├── toon_parser/
-│   │   ├── __init__.py
-│   │   ├── parser.py     # TOON → JSON parser
-│   │   └── serializer.py # JSON → TOON serializer
-│   ├── tests/
-│   ├── pyproject.toml
-│   └── setup.py
+├── tests/                # Test suite
+│   └── ...
 │
-└── shared/                # Shared test fixtures
-    └── test_cases.json   # Common test cases for both implementations
+├── examples/             # Usage examples
+│   └── ...
+│
+├── pyproject.toml        # Package configuration
+├── setup.py              # Setup script
+└── CHANGELOG.md          # Version history
 ```
 
 ## Development Commands
 
-### JavaScript/TypeScript
-
 ```bash
-cd js/
-
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm test -- --watch
-
-# Build the package
-npm run build
-
-# Lint code
-npm run lint
-
-# Type check
-npm run type-check
-
-# Publish to npm
-npm publish
-```
-
-### Python
-
-```bash
-cd python/
-
 # Create virtual environment
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -144,7 +106,7 @@ twine upload dist/*
 
 ### Core Components
 
-Both implementations must provide:
+The implementation provides:
 
 1. **Parser (TOON → JSON)**
    - Header line parser: extract array name, count, and field names
@@ -170,11 +132,11 @@ Both implementations must provide:
 
 ### Testing Strategy
 
-- **Shared test fixtures**: Use `shared/test_cases.json` for cross-language consistency
 - **Round-trip tests**: Verify JSON → TOON → JSON produces identical results
 - **Edge cases**: Empty arrays, null values, nested objects, special characters in strings
 - **Token counting**: Benchmark token reduction vs JSON (target: 30-60% savings)
 - **Accuracy tests**: If applicable, measure LLM parsing accuracy of generated TOON
+- **Comprehensive coverage**: Aim for high test coverage across all modules
 
 ## Reference Implementations
 
@@ -185,18 +147,113 @@ Existing TOON libraries (for reference, not dependencies):
 
 ## API Design
 
-### JavaScript/TypeScript
+```python
+def parse(toon: str) -> Any:
+    """Parse TOON string into Python object."""
+    ...
 
-```typescript
-export function parse(toon: string): any;
-export function stringify(json: any): string;
+def stringify(json_obj: Any) -> str:
+    """Convert Python object to TOON string."""
+    ...
 ```
 
-### Python
+## Semantic Versioning (SemVer)
+
+This project follows [Semantic Versioning 2.0.0](https://semver.org/).
+
+### Version Format
+
+**MAJOR.MINOR.PATCH** (e.g., `1.2.3`)
+
+- **MAJOR**: Incompatible API changes (breaking changes)
+- **MINOR**: Backward-compatible functionality additions
+- **PATCH**: Backward-compatible bug fixes
+
+### When to Bump Versions
+
+#### MAJOR version (breaking changes):
+- Changes to public API function signatures (`parse()`, `stringify()`)
+- Changes to TOON format specification that break parsing of existing valid TOON
+- Removal of public APIs or exports
+- Changes to return value structure that could break user code
+- Changes to error handling behavior (new exceptions, changed error types)
+- Minimum Python version requirements
+
+#### MINOR version (new features):
+- New public APIs or functions
+- New optional parameters with defaults
+- Performance improvements without API changes
+- Extended TOON format support (backward-compatible additions)
+- New error messages or warnings (non-breaking)
+
+#### PATCH version (bug fixes):
+- Bug fixes that restore documented behavior
+- Documentation updates
+- Internal refactoring with no API changes
+- Dependency updates (non-breaking)
+- Test improvements
+
+### Version Update Locations
+
+When bumping versions, update these files:
+
+- [`toon_parser/__init__.py`](toon_parser/__init__.py) — `__version__` variable
+- [`pyproject.toml`](pyproject.toml) — `version` field in `[project]` section
+
+### Pre-release Versions
+
+For testing before stable releases:
+
+- **Alpha**: `1.0.0-alpha.1` — Early development, unstable API
+- **Beta**: `1.0.0-beta.1` — Feature complete, testing phase
+- **Release Candidate**: `1.0.0-rc.1` — Final testing before stable release
+
+### Version Bump Checklist
+
+Before releasing a new version:
+
+1. ✅ Update version numbers in all relevant files
+2. ✅ Update CHANGELOG.md with changes since last release
+3. ✅ Run full test suite (`pytest --cov=toon_parser`)
+4. ✅ Verify round-trip compatibility with previous versions
+5. ✅ Build package successfully (`python -m build`)
+6. ✅ Tag git commit with version (e.g., `v1.2.3`)
+7. ✅ Publish to PyPI (`twine upload dist/*`)
+8. ✅ Create GitHub release with release notes
+
+### Breaking Change Examples
+
+**Examples that require MAJOR version bump:**
 
 ```python
-def parse(toon: str) -> Any: ...
-def stringify(json_obj: Any) -> str: ...
+# Breaking: Changed return type
+- def parse(toon: str) -> dict
++ def parse(toon: str) -> ParseResult
+
+# Breaking: Removed function
+- def parse_stream(stream: IO) -> Any
+
+# Breaking: Changed parameter requirements
+- def stringify(json_obj: Any, indent: int = 2) -> str
++ def stringify(json_obj: Any, options: StringifyOptions) -> str
+
+# Breaking: Changed exception types
+- raises ValueError for parse errors
++ raises ToonParseError for parse errors
+```
+
+**Examples that allow MINOR version bump:**
+
+```python
+# New: Added optional parameter with default
+- def stringify(json_obj: Any, indent: int = 2) -> str
++ def stringify(json_obj: Any, indent: int = 2, compact: bool = False) -> str
+
+# New: Added new function
++ def validate(toon: str) -> bool
+
+# New: Added new optional feature
++ def parse(toon: str, strict: bool = False) -> Any
 ```
 
 ## Performance Considerations

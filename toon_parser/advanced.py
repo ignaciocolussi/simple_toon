@@ -1,7 +1,7 @@
 """Advanced TOON features: nested objects, streaming, and configuration."""
 
-from typing import Any, Dict, Iterator, List, Optional, Tuple
 import re
+from typing import Any, Dict, Iterator, List, Optional, Tuple
 
 
 class ToonConfig:
@@ -85,7 +85,7 @@ def unflatten_object(obj: Dict[str, Any], separator: str = ".") -> Dict[str, Any
         parts = key.split(separator)
         current = result
 
-        for i, part in enumerate(parts[:-1]):
+        for _, part in enumerate(parts[:-1]):
             if part not in current:
                 current[part] = {}
             elif not isinstance(current[part], dict):
@@ -111,7 +111,7 @@ def stringify_advanced(obj: Any, config: Optional[ToonConfig] = None) -> str:
     Returns:
         TOON formatted string with nested object support
     """
-    from .serializer import ToonSerializeError, _format_value, _quote_if_needed
+    from .serializer import ToonSerializeError, _format_value
 
     if config is None:
         config = ToonConfig()
@@ -151,7 +151,8 @@ def stringify_advanced(obj: Any, config: Optional[ToonConfig] = None) -> str:
                     )
             else:
                 raise ToonSerializeError(
-                    f"Array '{key}' contains nested objects. Enable flatten_nested or use simple objects."
+                    f"Array '{key}' contains nested objects. "
+                    "Enable flatten_nested or use simple objects."
                 )
         elif isinstance(value, list):
             # Empty or non-dict list
@@ -196,7 +197,9 @@ def parse_advanced(toon: str, config: Optional[ToonConfig] = None) -> Any:
     return result
 
 
-def stream_parse(toon: str, config: Optional[ToonConfig] = None) -> Iterator[Tuple[str, List[Dict[str, Any]]]]:
+def stream_parse(
+    toon: str, config: Optional[ToonConfig] = None
+) -> Iterator[Tuple[str, List[Dict[str, Any]]]]:
     """
     Stream parse TOON format, yielding one array at a time.
 
@@ -238,7 +241,7 @@ def stream_parse(toon: str, config: Optional[ToonConfig] = None) -> Iterator[Tup
             fields = [f.strip() for f in fields_str.split(",")] if fields_str else []
 
             # Parse rows
-            items = []
+            items: list[dict[str, Any]] = []
             i += 1
             indent = len(lines[i]) - len(lines[i].lstrip()) if i < len(lines) else 0
 
@@ -271,4 +274,5 @@ def stream_parse(toon: str, config: Optional[ToonConfig] = None) -> Iterator[Tup
 def _parse_row_simple(row: str, expected_count: int) -> List[Any]:
     """Simple CSV-style row parser."""
     from .parser import _parse_row
+
     return _parse_row(row, expected_count)

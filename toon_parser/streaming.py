@@ -1,10 +1,10 @@
 """Streaming serializer for memory-efficient TOON generation."""
 
-from typing import Any, Dict, Iterator, List, Optional, TextIO, Union
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Callable, Dict, Iterator, List, Optional, TextIO, Union
 
-from .advanced import ToonConfig, flatten_object
+from .advanced import ToonConfig
 from .serializer import _format_value
 
 
@@ -48,6 +48,7 @@ class StreamingSerializer:
         self._current_array: Optional[str] = None
         self._current_fields: Optional[List[str]] = None
         self._row_count = 0
+        self._output_path: Optional[Path] = None
 
         # Handle file path vs file object
         if isinstance(output, (str, Path)):
@@ -55,7 +56,6 @@ class StreamingSerializer:
             self._file_owned = True
         else:
             self._file = output
-            self._output_path = None
 
     def __enter__(self) -> "StreamingSerializer":
         """Context manager entry."""
@@ -64,7 +64,7 @@ class StreamingSerializer:
             self._file = open(self._output_path, "w", encoding="utf-8")
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Context manager exit."""
         if self._current_array:
             # Auto-close any open array
@@ -91,7 +91,9 @@ class StreamingSerializer:
             RuntimeError: If another array is already open
         """
         if self._current_array:
-            raise RuntimeError(f"Array '{self._current_array}' is still open. Call end_array() first.")
+            raise RuntimeError(
+                f"Array '{self._current_array}' is still open. Call end_array() first."
+            )
 
         if not self._file:
             raise RuntimeError("No output file opened")
@@ -125,9 +127,7 @@ class StreamingSerializer:
             raise RuntimeError("No array is open. Call begin_array() first.")
 
         if len(values) != len(self._current_fields):
-            raise ValueError(
-                f"Expected {len(self._current_fields)} values, got {len(values)}"
-            )
+            raise ValueError(f"Expected {len(self._current_fields)} values, got {len(values)}")
 
         if not self._file:
             raise RuntimeError("No output file opened")
@@ -279,7 +279,7 @@ def streaming_serializer(
 
 
 def stream_from_database(
-    query_func,
+    query_func: Callable[[], Iterator[Dict[str, Any]]],
     array_name: str,
     fields: List[str],
     output: Union[str, Path],

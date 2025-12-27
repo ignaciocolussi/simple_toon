@@ -1,12 +1,11 @@
 """Tests for advanced TOON features."""
 
-import pytest
 from toon_parser import (
     ToonConfig,
-    stringify_advanced,
+    flatten_object,
     parse_advanced,
     stream_parse,
-    flatten_object,
+    stringify_advanced,
     unflatten_object,
 )
 
@@ -22,9 +21,7 @@ class TestFlattenUnflatten:
 
     def test_flatten_deep_nested(self):
         """Test flattening deeply nested object."""
-        nested = {
-            "user": {"profile": {"contact": {"email": "alice@example.com", "phone": "123"}}}
-        }
+        nested = {"user": {"profile": {"contact": {"email": "alice@example.com", "phone": "123"}}}}
         flattened = flatten_object(nested)
         assert flattened == {
             "user.profile.contact.email": "alice@example.com",
@@ -82,7 +79,7 @@ class TestAdvancedStringify:
         }
         result = stringify_advanced(data)
         assert "users[2]{id,name,address.city,address.zip}:" in result
-        assert "1,Alice,NYC,\"10001\"" in result or "1,Alice,NYC,10001" in result
+        assert '1,Alice,NYC,"10001"' in result or "1,Alice,NYC,10001" in result
 
     def test_stringify_with_config(self):
         """Test serializing with custom configuration."""
@@ -220,7 +217,11 @@ class TestAdvancedRoundtrip:
             "users": [
                 {
                     "id": 1,
-                    "profile": {"name": "Alice", "age": 30, "contact": {"email": "alice@example.com"}},
+                    "profile": {
+                        "name": "Alice",
+                        "age": 30,
+                        "contact": {"email": "alice@example.com"},
+                    },
                 },
                 {
                     "id": 2,

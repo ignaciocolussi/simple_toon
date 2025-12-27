@@ -1,24 +1,21 @@
 """Tests for file I/O utilities."""
 
-import json
-import tempfile
-from pathlib import Path
 import pytest
 
 from toon_parser import (
-    read_toon,
-    write_toon,
-    read_json,
-    write_json,
-    convert_json_to_toon,
-    convert_toon_to_json,
-    batch_convert,
-    get_file_stats,
-    ToonFileError,
-    Schema,
     Field,
     FieldType,
+    Schema,
+    ToonFileError,
     ValidationError,
+    batch_convert,
+    convert_json_to_toon,
+    convert_toon_to_json,
+    get_file_stats,
+    read_json,
+    read_toon,
+    write_json,
+    write_toon,
 )
 
 

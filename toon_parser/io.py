@@ -4,10 +4,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, Optional, Union
 
+from .advanced import ToonConfig, parse_advanced, stringify_advanced
 from .parser import parse
+from .schema import MultiSchema, Schema, ValidationError
 from .serializer import stringify
-from .advanced import parse_advanced, stringify_advanced, ToonConfig
-from .schema import Schema, MultiSchema, ValidationError
 
 
 class ToonFileError(Exception):
@@ -47,10 +47,10 @@ def read_toon(
         raise ToonFileError(f"Not a file: {file_path}")
 
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             content = f.read()
     except Exception as e:
-        raise ToonFileError(f"Failed to read file {file_path}: {str(e)}")
+        raise ToonFileError(f"Failed to read file {file_path}: {str(e)}") from e
 
     try:
         if advanced:
@@ -58,14 +58,14 @@ def read_toon(
         else:
             data = parse(content)
     except Exception as e:
-        raise ToonFileError(f"Failed to parse TOON file {file_path}: {str(e)}")
+        raise ToonFileError(f"Failed to parse TOON file {file_path}: {str(e)}") from e
 
     # Validate if schema provided
     if schema is not None:
         try:
             schema.validate(data)
         except ValidationError as e:
-            raise ValidationError(f"Schema validation failed for {file_path}: {str(e)}")
+            raise ValidationError(f"Schema validation failed for {file_path}: {str(e)}") from e
 
     return data
 
@@ -104,7 +104,7 @@ def write_toon(
         try:
             schema.validate(data)
         except ValidationError as e:
-            raise ValidationError(f"Schema validation failed: {str(e)}")
+            raise ValidationError(f"Schema validation failed: {str(e)}") from e
 
     # Serialize to TOON
     try:
@@ -113,7 +113,7 @@ def write_toon(
         else:
             content = stringify(data)
     except Exception as e:
-        raise ToonFileError(f"Failed to serialize data: {str(e)}")
+        raise ToonFileError(f"Failed to serialize data: {str(e)}") from e
 
     # Write to file
     try:
@@ -123,7 +123,7 @@ def write_toon(
         with open(path, "w", encoding="utf-8") as f:
             f.write(content)
     except Exception as e:
-        raise ToonFileError(f"Failed to write file {file_path}: {str(e)}")
+        raise ToonFileError(f"Failed to write file {file_path}: {str(e)}") from e
 
 
 def read_json(file_path: Union[str, Path]) -> Any:
@@ -145,10 +145,10 @@ def read_json(file_path: Union[str, Path]) -> Any:
         raise ToonFileError(f"File not found: {file_path}")
 
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        raise ToonFileError(f"Failed to read JSON file {file_path}: {str(e)}")
+        raise ToonFileError(f"Failed to read JSON file {file_path}: {str(e)}") from e
 
 
 def write_json(
@@ -180,7 +180,7 @@ def write_json(
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=indent)
     except Exception as e:
-        raise ToonFileError(f"Failed to write JSON file {file_path}: {str(e)}")
+        raise ToonFileError(f"Failed to write JSON file {file_path}: {str(e)}") from e
 
 
 def convert_json_to_toon(
@@ -308,7 +308,7 @@ def batch_convert(
 
             results[str(input_file)] = str(output_file)
         except Exception as e:
-            raise ToonFileError(f"Failed to convert {input_file}: {str(e)}")
+            raise ToonFileError(f"Failed to convert {input_file}: {str(e)}") from e
 
     return results
 
@@ -345,7 +345,7 @@ def get_file_stats(file_path: Union[str, Path]) -> Dict[str, Any]:
         raise ToonFileError(f"Unknown file format: {path.suffix}")
 
     # Collect stats
-    stats = {
+    stats: Dict[str, Any] = {
         "file_path": str(path),
         "format": format_type,
         "file_size_bytes": file_size,

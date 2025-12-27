@@ -1,7 +1,7 @@
 """Schema validation for TOON format."""
 
-from typing import Any, Dict, List, Optional, Union, Callable
 from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Union
 
 
 class FieldType(Enum):
@@ -79,36 +79,55 @@ class Field:
         # Check type
         if self.field_type == FieldType.STRING:
             if not isinstance(value, str):
-                raise ValidationError(f"Field '{self.name}' must be a string, got {type(value).__name__}")
+                raise ValidationError(
+                    f"Field '{self.name}' must be a string, got {type(value).__name__}"
+                )
         elif self.field_type == FieldType.INTEGER:
             if not isinstance(value, int) or isinstance(value, bool):
-                raise ValidationError(f"Field '{self.name}' must be an integer, got {type(value).__name__}")
+                raise ValidationError(
+                    f"Field '{self.name}' must be an integer, got {type(value).__name__}"
+                )
         elif self.field_type == FieldType.FLOAT:
             if not isinstance(value, float):
-                raise ValidationError(f"Field '{self.name}' must be a float, got {type(value).__name__}")
+                raise ValidationError(
+                    f"Field '{self.name}' must be a float, got {type(value).__name__}"
+                )
         elif self.field_type == FieldType.BOOLEAN:
             if not isinstance(value, bool):
-                raise ValidationError(f"Field '{self.name}' must be a boolean, got {type(value).__name__}")
+                raise ValidationError(
+                    f"Field '{self.name}' must be a boolean, got {type(value).__name__}"
+                )
         elif self.field_type == FieldType.NUMBER:
             if not isinstance(value, (int, float)) or isinstance(value, bool):
-                raise ValidationError(f"Field '{self.name}' must be a number, got {type(value).__name__}")
+                raise ValidationError(
+                    f"Field '{self.name}' must be a number, got {type(value).__name__}"
+                )
 
         # Check range for numbers
         if isinstance(value, (int, float)) and not isinstance(value, bool):
             if self.min_value is not None and value < self.min_value:
-                raise ValidationError(f"Field '{self.name}' value {value} is less than minimum {self.min_value}")
+                raise ValidationError(
+                    f"Field '{self.name}' value {value} is less than minimum {self.min_value}"
+                )
             if self.max_value is not None and value > self.max_value:
-                raise ValidationError(f"Field '{self.name}' value {value} is greater than maximum {self.max_value}")
+                raise ValidationError(
+                    f"Field '{self.name}' value {value} is greater than maximum {self.max_value}"
+                )
 
         # Check pattern for strings
         if isinstance(value, str) and self.pattern is not None:
             import re
+
             if not re.match(self.pattern, value):
-                raise ValidationError(f"Field '{self.name}' value '{value}' does not match pattern '{self.pattern}'")
+                raise ValidationError(
+                    f"Field '{self.name}' value '{value}' does not match pattern '{self.pattern}'"
+                )
 
         # Check enum
         if self.enum is not None and value not in self.enum:
-            raise ValidationError(f"Field '{self.name}' value '{value}' not in allowed values: {self.enum}")
+            raise ValidationError(
+                f"Field '{self.name}' value '{value}' not in allowed values: {self.enum}"
+            )
 
         # Custom validator
         if self.validator is not None:
@@ -116,7 +135,7 @@ class Field:
                 if not self.validator(value):
                     raise ValidationError(f"Field '{self.name}' failed custom validation")
             except Exception as e:
-                raise ValidationError(f"Field '{self.name}' validation error: {str(e)}")
+                raise ValidationError(f"Field '{self.name}' validation error: {str(e)}") from e
 
 
 class Schema:
@@ -148,14 +167,16 @@ class Schema:
         """
         if not isinstance(item, dict):
             raise ValidationError(
-                f"Array '{self.array_name}' item {item_index} must be a dict, got {type(item).__name__}"
+                f"Array '{self.array_name}' item {item_index} must be a dict, "
+                f"got {type(item).__name__}"
             )
 
         # Check required fields
         for field_name, field in self.fields.items():
             if field.required and field_name not in item:
                 raise ValidationError(
-                    f"Array '{self.array_name}' item {item_index} missing required field '{field_name}'"
+                    f"Array '{self.array_name}' item {item_index} "
+                    f"missing required field '{field_name}'"
                 )
 
         # Validate present fields
@@ -163,7 +184,8 @@ class Schema:
             if field_name not in self.fields:
                 if self.strict:
                     raise ValidationError(
-                        f"Array '{self.array_name}' item {item_index} has unexpected field '{field_name}'"
+                        f"Array '{self.array_name}' item {item_index} "
+                        f"has unexpected field '{field_name}'"
                     )
                 continue
 
@@ -180,7 +202,9 @@ class Schema:
             ValidationError: If validation fails
         """
         if not isinstance(items, list):
-            raise ValidationError(f"Array '{self.array_name}' must be a list, got {type(items).__name__}")
+            raise ValidationError(
+                f"Array '{self.array_name}' must be a list, got {type(items).__name__}"
+            )
 
         for i, item in enumerate(items):
             self.validate_item(item, i)
@@ -271,7 +295,7 @@ def infer_schema(data: Dict[str, Any], array_name: str, strict: bool = True) -> 
 
     for item in items:
         if not isinstance(item, dict):
-            raise ValidationError(f"Cannot infer schema from non-dict items")
+            raise ValidationError("Cannot infer schema from non-dict items")
 
         for field_name, value in item.items():
             if field_name not in field_types:
