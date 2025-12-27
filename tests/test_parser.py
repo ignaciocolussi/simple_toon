@@ -1,11 +1,12 @@
 """Tests for TOON parser."""
 
 import json
-import pytest
 from pathlib import Path
+
+import pytest
+
 from toon_parser import parse
 from toon_parser.parser import ToonParseError
-
 
 # Load shared test cases
 test_cases_path = Path(__file__).parent.parent.parent / "shared" / "test_cases.json"
@@ -92,5 +93,9 @@ class TestParser:
         toon = "flags[3]{id,enabled}:\n  1,true\n  2,false\n  3,TRUE"
         result = parse(toon)
         assert result == {
-            "flags": [{"id": 1, "enabled": True}, {"id": 2, "enabled": False}, {"id": 3, "enabled": True}]
+            "flags": [
+                {"id": 1, "enabled": True},
+                {"id": 2, "enabled": False},
+                {"id": 3, "enabled": True},
+            ]
         }

@@ -54,9 +54,7 @@ def parse(toon: str) -> Any:
     return result if result else None
 
 
-def _parse_lines(
-    lines: List[str], start_idx: int, current_indent: int
-) -> Tuple[Any, int]:
+def _parse_lines(lines: List[str], start_idx: int, current_indent: int) -> Tuple[Any, int]:
     """
     Parse lines starting from start_idx with expected indentation.
 
@@ -80,7 +78,9 @@ def _parse_lines(
 
     # Check for malformed array header (missing count or brackets)
     if re.match(r"^(\w+)(\{[^}]+\}:|\[\d+\])", stripped) and not array_match:
-        raise ToonParseError(f"Malformed array header: '{stripped}'. Expected format: arrayName[N]{{field1,field2}}:")
+        raise ToonParseError(
+            f"Malformed array header: '{stripped}'. Expected format: arrayName[N]{{field1,field2}}:"
+        )
 
     if array_match:
         array_name = array_match.group(1)

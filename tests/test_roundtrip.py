@@ -2,8 +2,8 @@
 
 import json
 from pathlib import Path
-from toon_parser import parse, stringify
 
+from toon_parser import parse, stringify
 
 # Load shared test cases
 test_cases_path = Path(__file__).parent.parent.parent / "shared" / "test_cases.json"

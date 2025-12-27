@@ -1,10 +1,8 @@
 """Tests for streaming serializer."""
 
-import tempfile
-from pathlib import Path
 import pytest
 
-from toon_parser import StreamingSerializer, streaming_serializer, stream_from_database
+from toon_parser import StreamingSerializer, stream_from_database, streaming_serializer
 
 
 class TestStreamingSerializer:
@@ -88,7 +86,7 @@ class TestStreamingSerializer:
         with StreamingSerializer(output_file) as writer:
             writer.begin_array("test", ["id", "name"])
 
-            with pytest.raises(ValueError):
+            with pytest.raises(ValueError, match="Expected .* values"):
                 writer.write_row([1])  # Missing name
 
     def test_error_on_no_array_open(self, tmp_path):

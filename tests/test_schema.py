@@ -1,11 +1,12 @@
 """Tests for schema validation."""
 
 import pytest
+
 from toon_parser import (
     Field,
     FieldType,
-    Schema,
     MultiSchema,
+    Schema,
     ValidationError,
     infer_schema,
 )
@@ -202,7 +203,9 @@ class TestMultiSchema:
 
     def test_reject_extra_arrays(self):
         """Test rejecting extra arrays."""
-        schemas = MultiSchema([Schema("users", [Field("id", FieldType.INTEGER)])], allow_extra_arrays=False)
+        schemas = MultiSchema(
+            [Schema("users", [Field("id", FieldType.INTEGER)])], allow_extra_arrays=False
+        )
 
         with pytest.raises(ValidationError):
             schemas.validate({"users": [{"id": 1}], "extra": [{"data": "value"}]})

@@ -8,19 +8,25 @@ Why both?
 - OO API: Stateful, configurable, better for repeated operations
 """
 
-from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 from pathlib import Path
+from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
-from .parser import parse as _parse
-from .serializer import stringify as _stringify
 from .advanced import (
-    parse_advanced as _parse_advanced,
-    stringify_advanced as _stringify_advanced,
-    stream_parse as _stream_parse,
     ToonConfig,
 )
-from .schema import Schema, ValidationError
+from .advanced import (
+    parse_advanced as _parse_advanced,
+)
+from .advanced import (
+    stream_parse as _stream_parse,
+)
+from .advanced import (
+    stringify_advanced as _stringify_advanced,
+)
 from .io import read_toon, write_toon
+from .parser import parse as _parse
+from .schema import Schema
+from .serializer import stringify as _stringify
 
 
 class ToonParser:
@@ -259,7 +265,9 @@ class ToonDocument:
         return cls(data, config)
 
     @classmethod
-    def from_file(cls, file_path: Union[str, Path], config: Optional[ToonConfig] = None) -> "ToonDocument":
+    def from_file(
+        cls, file_path: Union[str, Path], config: Optional[ToonConfig] = None
+    ) -> "ToonDocument":
         """
         Create document from TOON file.
 
@@ -426,14 +434,22 @@ class ToonConverter:
     def json_to_toon(self, json_path: Union[str, Path], toon_path: Union[str, Path]) -> None:
         """Convert JSON file to TOON."""
         from .io import convert_json_to_toon
-        convert_json_to_toon(json_path, toon_path, advanced=self.parser.advanced, config=self.parser.config)
+
+        convert_json_to_toon(
+            json_path, toon_path, advanced=self.parser.advanced, config=self.parser.config
+        )
 
     def toon_to_json(self, toon_path: Union[str, Path], json_path: Union[str, Path]) -> None:
         """Convert TOON file to JSON."""
         from .io import convert_toon_to_json
-        convert_toon_to_json(toon_path, json_path, advanced=self.parser.advanced, config=self.parser.config)
 
-    def get_savings(self, json_path: Union[str, Path], toon_path: Union[str, Path]) -> Dict[str, Any]:
+        convert_toon_to_json(
+            toon_path, json_path, advanced=self.parser.advanced, config=self.parser.config
+        )
+
+    def get_savings(
+        self, json_path: Union[str, Path], toon_path: Union[str, Path]
+    ) -> Dict[str, Any]:
         """
         Calculate token/byte savings between JSON and TOON files.
 

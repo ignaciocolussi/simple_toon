@@ -1,18 +1,15 @@
 """Tests for object-oriented API."""
 
-import tempfile
-from pathlib import Path
 import pytest
 
 from toon_parser import (
-    ToonParser,
-    ToonSerializer,
-    ToonDocument,
-    ToonConverter,
-    ToonConfig,
-    Schema,
     Field,
     FieldType,
+    Schema,
+    ToonConverter,
+    ToonDocument,
+    ToonParser,
+    ToonSerializer,
     ValidationError,
 )
 
@@ -51,6 +48,7 @@ class TestToonParser:
   1,Alice"""
 
         data = parser.parse(toon)  # Should pass
+        assert data == {"users": [{"id": 1, "name": "Alice"}]}
 
         # Invalid data
         bad_toon = """users[1]{id,name}:
@@ -115,6 +113,7 @@ class TestToonSerializer:
         # Valid data
         valid = {"users": [{"id": 1}]}
         toon = serializer.stringify(valid)  # Should pass
+        assert "users[1]{id}:" in toon
 
         # Invalid data
         invalid = {"users": [{"id": "not_int"}]}
@@ -183,7 +182,13 @@ class TestToonDocument:
     def test_query(self):
         """Test querying data."""
         doc = ToonDocument(
-            {"users": [{"id": 1, "active": True}, {"id": 2, "active": False}, {"id": 3, "active": True}]}
+            {
+                "users": [
+                    {"id": 1, "active": True},
+                    {"id": 2, "active": False},
+                    {"id": 3, "active": True},
+                ]
+            }
         )
 
         active_users = doc.query("users", lambda u: u["active"])
@@ -240,6 +245,7 @@ class TestToonConverter:
         toon_file = tmp_path / "output.toon"
 
         import json
+
         json_file.write_text(json.dumps({"users": [{"id": 1}]}))
 
         converter.json_to_toon(json_file, toon_file)
@@ -265,6 +271,7 @@ class TestToonConverter:
         toon_file = tmp_path / "output.toon"
 
         import json
+
         data = {"users": [{"id": i, "name": f"User{i}"} for i in range(100)]}
         json_file.write_text(json.dumps(data))
 

@@ -1,10 +1,10 @@
 """Streaming serializer for memory-efficient TOON generation."""
 
-from typing import Any, Dict, Iterator, List, Optional, TextIO, Union
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Dict, Iterator, List, Optional, TextIO, Union
 
-from .advanced import ToonConfig, flatten_object
+from .advanced import ToonConfig
 from .serializer import _format_value
 
 
@@ -91,7 +91,9 @@ class StreamingSerializer:
             RuntimeError: If another array is already open
         """
         if self._current_array:
-            raise RuntimeError(f"Array '{self._current_array}' is still open. Call end_array() first.")
+            raise RuntimeError(
+                f"Array '{self._current_array}' is still open. Call end_array() first."
+            )
 
         if not self._file:
             raise RuntimeError("No output file opened")
@@ -125,9 +127,7 @@ class StreamingSerializer:
             raise RuntimeError("No array is open. Call begin_array() first.")
 
         if len(values) != len(self._current_fields):
-            raise ValueError(
-                f"Expected {len(self._current_fields)} values, got {len(values)}"
-            )
+            raise ValueError(f"Expected {len(self._current_fields)} values, got {len(values)}")
 
         if not self._file:
             raise RuntimeError("No output file opened")
