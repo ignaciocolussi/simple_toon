@@ -57,8 +57,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ignac/simple-toon"
-Repository = "https://github.com/ignac/simple-toon"
+Homepage = "https://github.com/ignaciocolussi/simple_toon"
+Repository = "https://github.com/ignaciocolussi/simple_toon"
 Documentation = "https://github.com/ignac/simple-toon#readme"
 "Bug Tracker" = "https://github.com/ignac/simple-toon/issues"
 Changelog = "https://github.com/ignac/simple-toon/blob/main/CHANGELOG.md"
