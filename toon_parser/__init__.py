@@ -41,7 +41,7 @@ from .oo_api import (
     ToonConverter,
 )
 
-__version__ = "0.2.0"  # Bumped for new OO API and streaming serializer
+__version__ = "0.2.1"  # Updated repository URLs
 __all__ = [
     # Basic parsing/serializing (functional API)
     "parse",
